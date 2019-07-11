@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+  <title>Langton's Ant (D3)</title>
+  <style>
+    html {
+      background-color: #EFF9F5;
+    }
+    html,svg {
+      width: 100%;
+      height: 100%;
+    }
+    circle[data="2"] {
+      fill: red; /* ant */
+    }
+    circle[data="1"] {
+      fill: green; /* alive */
+    }
+    circle[data="0"] {
+      fill: white; /* dead */
+    }
+  </style>
+</head>
+<body>
+  <div id="ctrl">
+    <label>Rows:</label><input id="rows" type="number" value="75"/>
+    <label>Cols:</label><input id="cols" type="number" value="150"/>
+    <label>Live Rate:</label><input id="rate" type="number" step="0.1" min="0.0" max="0.9" value="0.0"/>
+    <label>Delay(ms):</label><input id="delay" type="number" value="1000"/>
+    <button onclick="onPlay()">Play</button>
+  </div>
+  <div id="board"></div>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/4.13.1/lodash.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/d3/4.1.1/d3.min.js"></script>
+  <script src='index.d3.js'></script>
+  <script>
+    const board = new Board('#board')
+    let intervalEvt = undefined
+
+    function updateBoard() {
+      const rows = parseInt(document.getElementById('rows').value) || 75
+      const cols = parseInt(document.getElementById('cols').value) || 150
+      const rate = parseFloat(document.getElementById('rate').value)
+      const delay = parseInt(document.getElementById('delay').value) || 1000
+      const game = new LangtonAnt(rows, cols, rate) // ant init position: middle center, direction: up
+
+      game.initBoard()
+      board.render(game.getLives())
+
+      const handler = () => {
+        game.nextRound()
+        board.render(game.getLives())
+        intervalEvt = setTimeout(handler, delay)
+      }
+
+      handler()
+    }
+
+    function onPlay() {
+      if (intervalEvt) {
+        clearTimeout(intervalEvt)
+        d3.select('#board').select('svg').selectAll('circle').remove()
+      }
+      updateBoard()
+    }
+  </script>
+</body>
+</html>

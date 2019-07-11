@@ -11,6 +11,6 @@
 >* 若蚂蚁在白格，右转90度，将该格改为黑格，向前移一步；
 >* 若蚂蚁在黑格，左转90度，将该格改为白格，向前移一步。
 
-## ReactJS版本
+## D3JS版本
 
 * [Online Demo](//blog.zhangyu.so/langtonant/index.html)

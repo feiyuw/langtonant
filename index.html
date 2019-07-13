@@ -63,6 +63,9 @@
 
       const handler = () => {
         game.nextRound()
+        if (game.isStopped()) {
+          return
+        }
         stepCount++
         board.render(game.getLives())
         steps.innerText = stepCount

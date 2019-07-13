@@ -27,6 +27,8 @@ class LangtonAnt {
 
   getLives = () => this._lives
 
+  isStopped = () => this._end
+
   nextRound = () => {
     if (this._end) {
       return

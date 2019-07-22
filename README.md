@@ -30,3 +30,4 @@ echo "\u25b6"  # ▶
 
 执行效果：
 
+[![asciicast](https://asciinema.org/a/2qrizlvQHwE6ynwlxdrC8iOMY.svg)](https://asciinema.org/a/2qrizlvQHwE6ynwlxdrC8iOMY)

@@ -49,7 +49,7 @@ func newGame() *ant {
 		X:       STEP / 2,
 		Y:       STEP / 2,
 		D:       UP,
-		stepCnt: 0,
+		StepCnt: 0,
 	}
 
 	for x := 0; x < STEP; x++ {
@@ -71,14 +71,14 @@ type ant struct {
 	Y int // ant's y position [0, B.Cols)
 	D int // direction
 
-	stepCnt int
+	StepCnt int
 }
 
 func (a *ant) draw() {
 	sb.Reset()
 	sb.WriteString(fmt.Sprintf("\u001b[%dD", (a.B.Rows+1)*(a.B.Cols+1)))
 	sb.WriteString(fmt.Sprintf("\u001b[%dA", a.B.Rows+1))
-	sb.WriteString(fmt.Sprintf("\u001b[38;5;85mSteps: %d\u001b[0m\n", a.stepCnt))
+	sb.WriteString(fmt.Sprintf("\u001b[38;5;85mSteps: %d\u001b[0m\n", a.StepCnt))
 
 	for x := 0; x < a.B.Rows; x++ {
 		for y := 0; y < a.B.Cols; y++ {
@@ -155,7 +155,7 @@ func (a *ant) oneStep() {
 	}
 
 	// increase board size if needed
-	if a.X <= 1 { // increase top margin
+	if a.X < 1 { // increase top margin
 		a.B.Rows += STEP
 		a.X += STEP
 		extendedCells := make([][]bool, STEP, a.B.Rows)
@@ -165,7 +165,7 @@ func (a *ant) oneStep() {
 		a.B.Cells = append(extendedCells, a.B.Cells...)
 	}
 
-	if a.X >= (a.B.Rows - 2) { // increase bottom margin
+	if a.X >= (a.B.Rows - 1) { // increase bottom margin
 		a.B.Rows += STEP
 		for x := 0; x < STEP; x++ {
 			a.B.Cells = append(a.B.Cells, make([]bool, a.B.Cols))
@@ -181,7 +181,7 @@ func (a *ant) oneStep() {
 		}
 	}
 
-	if a.Y >= (a.B.Cols - 2) { // increase right margin
+	if a.Y >= (a.B.Cols - 1) { // increase right margin
 		a.B.Cols += STEP
 		for x := 0; x < a.B.Rows; x++ {
 			a.B.Cells[x] = append(a.B.Cells[x], make([]bool, STEP)...)
@@ -199,7 +199,7 @@ func (a *ant) move() {
 		a.turnRight()
 	}
 	a.oneStep()
-	a.stepCnt++
+	a.StepCnt++
 }
 
 func main() {
@@ -232,6 +232,10 @@ func main() {
 		default:
 			game.draw()
 			game.move()
+			if game.StepCnt > move {
+				log.Println("reach moves, stop it!")
+				return
+			}
 			time.Sleep(sleepInterval)
 		}
 	}

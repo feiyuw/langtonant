@@ -14,3 +14,19 @@
 ## D3JS版本
 
 * [Online Demo](//blog.zhangyu.so/langtonant/index.html)
+
+## Golang终端版本
+
+* go build -o lant lant.go
+* ./lant -i 200 # 默认间隔100ms
+
+建议深色终端背景，终端能支持几个方向箭头字符，即
+```bash
+echo "\u25b2"  # ▲
+echo "\u25bc"  # ▼
+echo "\u25c0"  # ◀
+echo "\u25b6"  # ▶
+```
+
+执行效果：
+

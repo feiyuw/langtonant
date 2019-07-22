@@ -108,6 +108,20 @@ func (a *ant) draw() {
 	fmt.Print(sb.String())
 }
 
+// move one step to the direction
+func (a *ant) move() {
+	if a.B.Cells[a.X][a.Y] { // in alive cell, turn left 90 degree, and change cell to dead
+		a.B.Cells[a.X][a.Y] = false
+		a.turnLeft()
+	} else { // in dead cell, turn right 90 degree, and change cell to alive
+		a.B.Cells[a.X][a.Y] = true
+		a.turnRight()
+	}
+	a.oneStep()
+	a.extendBoardIfNeeded()
+	a.StepCnt++
+}
+
 // left 90°
 func (a *ant) turnLeft() {
 	switch a.D {
@@ -153,7 +167,9 @@ func (a *ant) oneStep() {
 	default:
 		log.Fatalf("invalid direction: %d", a.D)
 	}
+}
 
+func (a *ant) extendBoardIfNeeded() {
 	// increase board size if needed
 	if a.X < 1 { // increase top margin
 		a.B.Rows += STEP
@@ -163,43 +179,26 @@ func (a *ant) oneStep() {
 			extendedCells[x] = make([]bool, a.B.Cols)
 		}
 		a.B.Cells = append(extendedCells, a.B.Cells...)
-	}
-
-	if a.X >= (a.B.Rows - 1) { // increase bottom margin
+	} else if a.X >= a.B.Rows-1 { // increase bottom margin
 		a.B.Rows += STEP
 		for x := 0; x < STEP; x++ {
 			a.B.Cells = append(a.B.Cells, make([]bool, a.B.Cols))
 		}
 	}
 
-	if a.Y <= 1 { // increase left margin
+	if a.Y < 1 { // increase left margin
 		a.B.Cols += STEP
 		a.Y += STEP
 		for x := 0; x < a.B.Rows; x++ {
 			extendedCells := make([]bool, STEP, a.B.Cols)
 			a.B.Cells[x] = append(extendedCells, a.B.Cells[x]...)
 		}
-	}
-
-	if a.Y >= (a.B.Cols - 1) { // increase right margin
+	} else if a.Y >= a.B.Cols-1 { // increase right margin
 		a.B.Cols += STEP
 		for x := 0; x < a.B.Rows; x++ {
 			a.B.Cells[x] = append(a.B.Cells[x], make([]bool, STEP)...)
 		}
 	}
-}
-
-// move one step to the direction
-func (a *ant) move() {
-	if a.B.Cells[a.X][a.Y] { // in alive cell, turn left 90 degree, and change cell to dead
-		a.B.Cells[a.X][a.Y] = false
-		a.turnLeft()
-	} else { // in dead cell, turn right 90 degree, and change cell to alive
-		a.B.Cells[a.X][a.Y] = true
-		a.turnRight()
-	}
-	a.oneStep()
-	a.StepCnt++
 }
 
 func main() {

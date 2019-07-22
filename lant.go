@@ -4,7 +4,6 @@ import (
 	"flag"
 	"fmt"
 	"log"
-	"math/rand"
 	"os"
 	"os/signal"
 	"strings"
@@ -34,10 +33,6 @@ var (
 	antLeft  = []byte("\u001b[48;5;252m\u001b[38;5;196m\u25c0=\u001b[0m")
 	antRight = []byte("\u001b[48;5;252m\u001b[38;5;196m=\u25b6\u001b[0m")
 )
-
-func init() {
-	rand.Seed(time.Now().UnixNano())
-}
 
 func newGame() *ant {
 	game := &ant{
